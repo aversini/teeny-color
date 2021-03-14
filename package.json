@@ -1,6 +1,6 @@
 {
   "name": "teeny-color",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "author": "Arno Versini",
   "description": "Tiny library to manipulate colors and generate random accessible ones",
