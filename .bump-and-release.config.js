@@ -45,6 +45,10 @@ module.exports = {
         command: "npm run test",
       },
       {
+        name: "build commonjs",
+        command: "npm run build",
+      },
+      {
         name: "generate changelog",
         command: "npm run changelog",
       },
