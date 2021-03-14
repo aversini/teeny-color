@@ -1,0 +1,64 @@
+{
+  "name": "teeny-color",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "Arno Versini",
+  "description": "Tiny library to manipulate colors and generate random accessible ones",
+  "homepage": "https://github.com/aversini/teeny-color",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:aversini/teeny-color.git"
+  },
+  "main": "cjs/index.js",
+  "module": "src/index.js",
+  "files": [
+    "src/*.js",
+    "cjs/*.js"
+  ],
+  "scripts": {
+    "build": "rimraf cjs && cross-env BABEL_ENV=\"production\" NODE_ENV=\"production\" babel src --ignore **/*.test.js --out-dir cjs",
+    "bump": "bump-and-release -t bump",
+    "clean": "rimraf cjs",
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
+    "latest": "rimraf LATEST.md && conventional-changelog -o LATEST.md -n \"./configuration/latest/config.js\"",
+    "lint": "eslint --color \"./src/*.js\" \"./configuration/**/*.js\"",
+    "lint:fix": "eslint --fix --color \"./src/*.js\" \"./configuration/**/*.js\"",
+    "prettier:fix": "prettier --loglevel error --write \"{src/**/*.js,configuration/**/*.js}\"",
+    "prettier:all": "npm-run-all --serial prettier:fix lint:fix",
+    "release": "bump-and-release -t release",
+    "test": "cross-env NODE_ENV=\"test\" TZ=UTC jest",
+    "test:coverage": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --watch"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "@testing-library/jest-dom": "^5.11.9",
+    "babel-eslint": "^10.1.0",
+    "bump-and-release": "^2.0.0",
+    "compare-func": "^2.0.0",
+    "conventional-changelog-cli": "^2.1.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-sort-keys-fix": "^1.1.1",
+    "husky": "^4.3.8",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "q": "^1.5.1",
+    "rimraf": "^3.0.2",
+    "teeny-perf": "^2.0.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.13.10",
+    "hex-rgb": "4.2.0",
+    "rgb-hex": "3.0.0"
+  }
+}
