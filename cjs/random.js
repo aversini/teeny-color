@@ -29,9 +29,7 @@ var RandomColor = /*#__PURE__*/function () {
         _ref$wcagLevel = _ref.wcagLevel,
         wcagLevel = _ref$wcagLevel === void 0 ? "AA" : _ref$wcagLevel,
         _ref$luminosity = _ref.luminosity,
-        luminosity = _ref$luminosity === void 0 ? "light" : _ref$luminosity,
-        _ref$ada = _ref.ada,
-        ada = _ref$ada === void 0 ? true : _ref$ada;
+        luminosity = _ref$luminosity === void 0 ? "light" : _ref$luminosity;
 
     _classCallCheck(this, RandomColor);
 
@@ -39,7 +37,6 @@ var RandomColor = /*#__PURE__*/function () {
     this.backgroundColor = backgroundColor;
     this.wcagLevel = wcagLevel;
     this.luminosity = luminosity;
-    this.ada = ada;
     this.colorDictionary = {}; // load color bounds
 
     this._defineColor("monochrome", null, [[0, 0], [100, 0]]);
@@ -121,6 +118,7 @@ var RandomColor = /*#__PURE__*/function () {
         var total = 0;
 
         for (var i = 0; i !== seed.length; i++) {
+          /* istanbul ignore if */
           if (total >= Number.MAX_SAFE_INTEGER) break;
           total += seed.charCodeAt(i);
         }
@@ -139,6 +137,7 @@ var RandomColor = /*#__PURE__*/function () {
       }
 
       for (var colorName in this.colorDictionary) {
+        /* istanbul ignore else */
         if ({}.hasOwnProperty.call(this.colorDictionary, colorName)) {
           var color = this.colorDictionary[colorName];
 
@@ -262,32 +261,30 @@ var RandomColor = /*#__PURE__*/function () {
 
       rgb = this._getRandomColor(seedInt);
 
-      if (this.ada) {
+      while (!(0, _accessibility.isAccessible)(rgb, this.backgroundColor, this.wcagLevel) && tries < MAX_TRIES) {
+        tries++;
+        rgb = this._getRandomColor(seedInt);
+      }
+
+      if (tries === MAX_TRIES) {
+        /**
+         * None of the tries did come up with
+         * an accessible contrast for the colors...
+         * Trying to change luminosity and hope for
+         * the best.
+         */
+        var luminosity = this.luminosity;
+        this.luminosity = luminosity === LUMINOSITY_LIGHT ? LUMINOSITY_DARK : LUMINOSITY_LIGHT;
+        tries = 0;
+        rgb = this._getRandomColor(seedInt);
+
         while (!(0, _accessibility.isAccessible)(rgb, this.backgroundColor, this.wcagLevel) && tries < MAX_TRIES) {
           tries++;
           rgb = this._getRandomColor(seedInt);
-        }
-
-        if (tries === MAX_TRIES) {
-          /**
-           * None of the 100 tries did come up with
-           * an accessible contrast for the colors...
-           * Trying to change luminosity and hope for
-           * the best.
-           */
-          var luminosity = this.luminosity;
-          this.luminosity = luminosity === LUMINOSITY_LIGHT ? LUMINOSITY_DARK : LUMINOSITY_LIGHT;
-          tries = 0;
-          rgb = this._getRandomColor(seedInt);
-
-          while (!(0, _accessibility.isAccessible)(rgb, this.backgroundColor, this.wcagLevel) && tries < MAX_TRIES) {
-            tries++;
-            rgb = this._getRandomColor(seedInt);
-          } // resetting to original luminosity
+        } // resetting to original luminosity
 
 
-          this.luminosity = luminosity;
-        }
+        this.luminosity = luminosity;
       }
 
       return tries === MAX_TRIES ? null : "#".concat((0, _colors.convertRGBAToHEX)(rgb[0], rgb[1], rgb[2]));
