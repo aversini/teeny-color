@@ -308,4 +308,29 @@ describe("when testing for individual utilities with no logging side-effects", (
     });
     expect(randomColor.color()).toMatch(re);
   });
+
+  it("should return that the color does not exist", async () => {
+    const randomColor = new RandomColor();
+    expect(randomColor._getColorInfo()).toBe("Color not found");
+  });
+
+  it("should return a special hue for reds", async () => {
+    const randomColor = new RandomColor();
+    expect(randomColor._getColorInfo(350)).toStrictEqual({
+      brightnessRange: [50, 100],
+      hueRange: [-26, 18],
+      lowerBounds: [
+        [20, 100],
+        [30, 92],
+        [40, 89],
+        [50, 85],
+        [60, 78],
+        [70, 70],
+        [80, 60],
+        [90, 55],
+        [100, 50],
+      ],
+      saturationRange: [20, 100],
+    });
+  });
 });
